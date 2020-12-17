@@ -11,9 +11,11 @@ import rootReducer from './modules/rootReducer';
 import rootSaga from './modules/rootSaga';
 
 import { INewsState } from './modules/news/types';
+import { IModalState } from './modules/modal/types';
 
 export interface IState {
   news: INewsState;
+  modal: IModalState;
 }
 
 const sagaMiddleware = createSagaMiddleware();

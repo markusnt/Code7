@@ -1,6 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { View, TextInput } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { cs } from 'date-fns/esm/locale';
 import { IState } from '../../store';
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -29,12 +29,15 @@ import Input from '../../components/Input';
 import News from '../../components/News';
 import ModalComp from '../../components/ModalComp';
 
+import { modalCallOpen } from '../../store/modules/modal/actions';
+
 interface NewsSearch {
   search: string;
 }
 
 const Main: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const { newsData } = useSelector<IState, string>((state) => {
@@ -42,9 +45,12 @@ const Main: React.FC = () => {
   });
 
   const [newsFilterData, setNewsFilterData] = useState(newsData);
+  useEffect(() => {
+    setNewsFilterData(newsData);
+  }, [newsData]);
+
   const [search, setSearch] = useState('');
 
-  console.log(search);
   const filterNews = (text: string) => {
     setSearch(text);
     const newData = newsData.filter((item: any) => {
@@ -76,6 +82,10 @@ const Main: React.FC = () => {
     [search],
   );
 
+  const openModal = (item: any) => {
+    return dispatch(modalCallOpen(item));
+  };
+
   return (
     <>
       <Container>
@@ -104,11 +114,13 @@ const Main: React.FC = () => {
             keyExtractor={(item: any) => item.id}
             style={{ width: '100%' }}
             renderItem={({ item }) => (
-              <News
-                title={item.title}
-                content={item.content}
-                autor={item.author}
-              />
+              <TouchableOpacity onPress={() => openModal(item)}>
+                <News
+                  title={item.title}
+                  content={item.content}
+                  autor={item.author}
+                />
+              </TouchableOpacity>
             )}
           />
         </Content>

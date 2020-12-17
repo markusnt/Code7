@@ -7,7 +7,7 @@ export default (reducers: any) => {
     {
       key: 'code7',
       storage: AsyncStorage,
-      whitelist: ['news'],
+      whitelist: ['news', 'modal'],
     },
     reducers,
   );

@@ -11,13 +11,14 @@ const INITIAL_STATE: INewsState = {
       id: 1,
       title: 'Teste Noticia',
       content: 'Utilizei o Redux para controle de estado',
-      author: 'Markus Nathan',
+      author: 'Markus',
     },
     {
       id: 2,
-      title: 'Teste Noticia',
-      content: 'Utilizei o Redux para controle de estado',
-      author: 'Markus Nathan',
+      title: 'Teste Noticia 02',
+      content:
+        'Utilizei o Redux para controle de estado e tbm fazer fazer Update / Delete',
+      author: 'Nathan',
     },
   ],
 };
@@ -30,8 +31,10 @@ const news: Reducer<INewsState> = (state = INITIAL_STATE, action) => {
         break;
       }
       case ActionTypes.newsDelete: {
-        console.log(action.payload.news.id);
-        // draft.newsData = [...state.newsData.filter, action.payload];
+        console.log(action.payload.newsId);
+        draft.newsData = [
+          ...state.newsData.filter((item) => item.id !== action.payload.newsId),
+        ];
         break;
       }
       case ActionTypes.newsUpdate: {
